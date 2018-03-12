@@ -1,3 +1,3 @@
-package watch
+package retry
 
 // TODO implement watch dog
