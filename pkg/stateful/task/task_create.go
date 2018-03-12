@@ -9,8 +9,12 @@ type CreateInstanceTask struct {
 	broker   Broker
 }
 
-func NewCreateTask() *CreateInstanceTask {
-	task := CreateInstanceTask{}
+func NewCreateTask(instance *storage.InstanceRecord, storage storage.Storage, broker Broker) *CreateInstanceTask {
+	task := CreateInstanceTask{
+		instance: instance,
+		storage:  storage,
+		broker:   broker,
+	}
 	t := brokerTask{
 		State:   BrokerTaskStateIdle,
 		RunFunc: task.run,
