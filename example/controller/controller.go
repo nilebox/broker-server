@@ -22,17 +22,17 @@ const (
 )
 
 type exampleController struct {
-	appCtx context.Context
+	appContext context.Context
 }
 
 func NewController(ctx context.Context) (controller.BrokerController, error) {
 	return &exampleController{
-		appCtx: ctx,
+		appContext: ctx,
 	}, nil
 }
 
 func (c *exampleController) Catalog(ctx context.Context) (*api.Catalog, error) {
-	log := c.appCtx.Value("log").(*zap.Logger)
+	log := c.logger()
 	log.Info("Catalog called")
 
 	catalog := api.Catalog{
@@ -68,43 +68,47 @@ func (c *exampleController) Catalog(ctx context.Context) (*api.Catalog, error) {
 }
 
 func (c *exampleController) GetInstanceStatus(ctx context.Context, instanceID, serviceID, planID, operation string) (*api.GetInstanceStatusResponse, error) {
-	log := ctx.Value("log").(*zap.Logger)
+	log := c.logger()
 	log = log.With(zappers.InstanceID(instanceID))
 	log.Info("GetInstanceStatus called")
 	return nil, nil
 }
 
 func (c *exampleController) CreateInstance(ctx context.Context, instanceID string, acceptsIncomplete bool, req *api.CreateInstanceRequest) (*api.CreateInstanceResponse, error) {
-	log := ctx.Value("log").(*zap.Logger)
+	log := c.logger()
 	log = log.With(zappers.InstanceID(instanceID))
 	log.Info("CreateInstance called")
 	return nil, nil
 }
 
 func (c *exampleController) UpdateInstance(ctx context.Context, instanceID string, acceptsIncomplete bool, req *api.UpdateInstanceRequest) (*api.UpdateInstanceResponse, error) {
-	log := ctx.Value("log").(*zap.Logger)
+	log := c.logger()
 	log = log.With(zappers.InstanceID(instanceID))
 	log.Info("UpdateInstance called")
 	return nil, nil
 }
 
 func (c *exampleController) RemoveInstance(ctx context.Context, instanceID, serviceID, planID string, acceptsIncomplete bool) (*api.DeleteInstanceResponse, error) {
-	log := ctx.Value("log").(*zap.Logger)
+	log := c.logger()
 	log = log.With(zappers.InstanceID(instanceID))
 	log.Info("RemoveInstance called")
 	return nil, nil
 }
 
 func (c *exampleController) CreateBinding(ctx context.Context, instanceID, bindingID string, req *api.BindingRequest) (*api.CreateBindingResponse, error) {
-	log := ctx.Value("log").(*zap.Logger)
+	log := c.logger()
 	log = log.With(zappers.InstanceID(instanceID), zappers.BindingID(bindingID))
 	log.Info("CreateBinding called")
 	return nil, nil
 }
 
 func (c *exampleController) RemoveBinding(ctx context.Context, instanceID, bindingID, serviceID, planID string) error {
-	log := ctx.Value("log").(*zap.Logger)
+	log := c.logger()
 	log = log.With(zappers.InstanceID(instanceID), zappers.BindingID(bindingID))
 	log.Info("RemoveBinding called")
 	return nil
+}
+
+func (c *exampleController) logger() *zap.Logger {
+	return c.appContext.Value("log").(*zap.Logger)
 }
