@@ -11,10 +11,10 @@ import (
 type BrokerController interface {
 	Catalog(ctx context.Context) (*api.Catalog, error)
 
-	GetInstanceStatus(ctx context.Context, instanceID, serviceID, planID, operation string) (*api.GetServiceInstanceStatusResponse, error)
-	CreateInstance(ctx context.Context, instanceID string, acceptsIncomplete bool, req *api.CreateServiceInstanceRequest) (*api.CreateServiceInstanceResponse, error)
-	UpdateInstance(ctx context.Context, instanceID string, acceptsIncomplete bool, req *api.UpdateServiceInstanceRequest) (*api.UpdateServiceInstanceResponse, error)
-	RemoveInstance(ctx context.Context, instanceID, serviceID, planID string, acceptsIncomplete bool) (*api.DeleteServiceInstanceResponse, error)
+	GetInstanceStatus(ctx context.Context, instanceID, serviceID, planID, operation string) (*api.GetInstanceStatusResponse, error)
+	CreateInstance(ctx context.Context, instanceID string, acceptsIncomplete bool, req *api.CreateInstanceRequest) (*api.CreateInstanceResponse, error)
+	UpdateInstance(ctx context.Context, instanceID string, acceptsIncomplete bool, req *api.UpdateInstanceRequest) (*api.UpdateInstanceResponse, error)
+	RemoveInstance(ctx context.Context, instanceID, serviceID, planID string, acceptsIncomplete bool) (*api.DeleteInstanceResponse, error)
 
 	CreateBinding(ctx context.Context, instanceID, bindingID string, req *api.BindingRequest) (*api.CreateServiceBindingResponse, error)
 	RemoveBinding(ctx context.Context, instanceID, bindingID, serviceID, planID string) error

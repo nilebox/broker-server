@@ -48,7 +48,7 @@ func (c *exampleController) Catalog(ctx context.Context) (*api.Catalog, error) {
 						Name:        PlanName,
 						Description: "Plan description",
 						//Schemas: &api.Schemas{
-						//	Instance: api.ServiceInstanceSchema{
+						//	Instance: api.InstanceSchema{
 						//		Create: api.Schema{
 						//			Parameters: c.schema,
 						//		},
@@ -67,28 +67,28 @@ func (c *exampleController) Catalog(ctx context.Context) (*api.Catalog, error) {
 	return &catalog, nil
 }
 
-func (c *exampleController) GetInstanceStatus(ctx context.Context, instanceID, serviceID, planID, operation string) (*api.GetServiceInstanceStatusResponse, error) {
+func (c *exampleController) GetInstanceStatus(ctx context.Context, instanceID, serviceID, planID, operation string) (*api.GetInstanceStatusResponse, error) {
 	log := ctx.Value("log").(*zap.Logger)
 	log = log.With(zappers.InstanceID(instanceID))
 	log.Info("GetInstanceStatus called")
 	return nil, nil
 }
 
-func (c *exampleController) CreateInstance(ctx context.Context, instanceID string, acceptsIncomplete bool, req *api.CreateServiceInstanceRequest) (*api.CreateServiceInstanceResponse, error) {
+func (c *exampleController) CreateInstance(ctx context.Context, instanceID string, acceptsIncomplete bool, req *api.CreateInstanceRequest) (*api.CreateInstanceResponse, error) {
 	log := ctx.Value("log").(*zap.Logger)
 	log = log.With(zappers.InstanceID(instanceID))
 	log.Info("CreateInstance called")
 	return nil, nil
 }
 
-func (c *exampleController) UpdateInstance(ctx context.Context, instanceID string, acceptsIncomplete bool, req *api.UpdateServiceInstanceRequest) (*api.UpdateServiceInstanceResponse, error) {
+func (c *exampleController) UpdateInstance(ctx context.Context, instanceID string, acceptsIncomplete bool, req *api.UpdateInstanceRequest) (*api.UpdateInstanceResponse, error) {
 	log := ctx.Value("log").(*zap.Logger)
 	log = log.With(zappers.InstanceID(instanceID))
 	log.Info("UpdateInstance called")
 	return nil, nil
 }
 
-func (c *exampleController) RemoveInstance(ctx context.Context, instanceID, serviceID, planID string, acceptsIncomplete bool) (*api.DeleteServiceInstanceResponse, error) {
+func (c *exampleController) RemoveInstance(ctx context.Context, instanceID, serviceID, planID string, acceptsIncomplete bool) (*api.DeleteInstanceResponse, error) {
 	log := ctx.Value("log").(*zap.Logger)
 	log = log.With(zappers.InstanceID(instanceID))
 	log.Info("RemoveInstance called")

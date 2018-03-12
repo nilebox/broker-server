@@ -2,8 +2,8 @@ package api
 
 import "encoding/json"
 
-// ServiceInstance represents an instance of a service
-type ServiceInstance struct {
+// Instance represents an instance of a service
+type Instance struct {
 	ID               string `json:"id"`
 	DashboardURL     string `json:"dashboard_url"`
 	InternalID       string `json:"internal_id, omitempty"`
@@ -17,9 +17,9 @@ type ServiceInstance struct {
 	Parameters map[string]interface{} `json:"parameters, omitempty"`
 }
 
-// CreateServiceInstanceRequest represents a request to a broker to provision an
+// CreateInstanceRequest represents a request to a broker to provision an
 // instance of a service
-type CreateServiceInstanceRequest struct {
+type CreateInstanceRequest struct {
 	OrgID      string          `json:"organization_guid"`
 	PlanID     string          `json:"plan_id"`
 	ServiceID  string          `json:"service_id"`
@@ -27,47 +27,47 @@ type CreateServiceInstanceRequest struct {
 	Parameters json.RawMessage `json:"parameters,omitempty"`
 }
 
-// CreateServiceInstanceResponse represents the response from a broker after a
+// CreateInstanceResponse represents the response from a broker after a
 // request to provision an instance of a service
-type CreateServiceInstanceResponse struct {
+type CreateInstanceResponse struct {
 	DashboardURL string `json:"dashboard_url, omitempty"`
 	Operation    string `json:"operation, omitempty"`
 	Async        bool   `json:"-"`
 }
 
-// UpdateServiceInstancePreviousValues represents a request to a broker containing
-// the previous values in a UpdateServiceInstanceRequest object.
-type UpdateServiceInstancePreviousValues struct {
+// UpdateInstancePreviousValues represents a request to a broker containing
+// the previous values in a UpdateInstanceRequest object.
+type UpdateInstancePreviousValues struct {
 	PlanID    *string `json:"plan_id,omitempty"`
 	ServiceID *string `json:"service_id,omitempty"`
 }
 
-// UpdateServiceInstanceRequest represents a request to a broker to update a
+// UpdateInstanceRequest represents a request to a broker to update a
 // instance of a service
-type UpdateServiceInstanceRequest struct {
-	ServiceID      string                               `json:"service_id"`
-	PlanID         *string                              `json:"plan_id,omitempty"`
-	Parameters     json.RawMessage                      `json:"parameters,omitempty"`
-	PreviousValues *UpdateServiceInstancePreviousValues `json:"previous_values,omitempty"`
+type UpdateInstanceRequest struct {
+	ServiceID      string                        `json:"service_id"`
+	PlanID         *string                       `json:"plan_id,omitempty"`
+	Parameters     json.RawMessage               `json:"parameters,omitempty"`
+	PreviousValues *UpdateInstancePreviousValues `json:"previous_values,omitempty"`
 }
 
-// UpdateServiceInstanceResponse represents the response from a broker after a
+// UpdateInstanceResponse represents the response from a broker after a
 // request to update an instance of a service
-type UpdateServiceInstanceResponse struct {
+type UpdateInstanceResponse struct {
 	Operation string `json:"operation, omitempty"`
 	Async     bool   `json:"-"`
 }
 
-// GetServiceInstanceStatusResponse represents the response from a broker with a status
+// GetInstanceStatusResponse represents the response from a broker with a status
 // of last operation applied to an instance of a service
-type GetServiceInstanceStatusResponse struct {
+type GetInstanceStatusResponse struct {
 	State       string `json:"state, omitempty"`
 	Description string `json:"description, omitempty"`
 }
 
-// DeleteServiceInstanceResponse represents the response from a broker after a request
+// DeleteInstanceResponse represents the response from a broker after a request
 // to deprovision an instance of a service
-type DeleteServiceInstanceResponse struct {
+type DeleteInstanceResponse struct {
 	Operation string `json:"operation,omitempty"`
 	Async     bool   `json:"-"`
 }

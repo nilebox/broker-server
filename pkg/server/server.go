@@ -34,10 +34,10 @@ func createHandler(ctx context.Context, c controller.BrokerController) http.Hand
 	var router = mux.NewRouter()
 
 	router.HandleFunc("/v2/catalog", s.catalog).Methods("GET")
-	router.HandleFunc("/v2/service_instances/{instance_id}/last_operation", s.getServiceInstanceStatus).Methods("GET")
-	router.HandleFunc("/v2/service_instances/{instance_id}", s.createServiceInstance).Methods("PUT")
-	router.HandleFunc("/v2/service_instances/{instance_id}", s.updateServiceInstance).Methods("PATCH")
-	router.HandleFunc("/v2/service_instances/{instance_id}", s.removeServiceInstance).Methods("DELETE")
+	router.HandleFunc("/v2/service_instances/{instance_id}/last_operation", s.getInstanceStatus).Methods("GET")
+	router.HandleFunc("/v2/service_instances/{instance_id}", s.createInstance).Methods("PUT")
+	router.HandleFunc("/v2/service_instances/{instance_id}", s.updateInstance).Methods("PATCH")
+	router.HandleFunc("/v2/service_instances/{instance_id}", s.removeInstance).Methods("DELETE")
 	router.HandleFunc("/v2/service_instances/{instance_id}/service_bindings/{binding_id}", s.bind).Methods("PUT")
 	router.HandleFunc("/v2/service_instances/{instance_id}/service_bindings/{binding_id}", s.unBind).Methods("DELETE")
 	router.HandleFunc("/healthcheck", s.healthcheck).Methods("GET")
@@ -100,7 +100,7 @@ func (s *server) catalog(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-func (s *server) getServiceInstanceStatus(w http.ResponseWriter, r *http.Request) {
+func (s *server) getInstanceStatus(w http.ResponseWriter, r *http.Request) {
 	instanceID := mux.Vars(r)["instance_id"]
 	q := r.URL.Query()
 	serviceID := first(q["service_id"])
@@ -115,11 +115,11 @@ func (s *server) getServiceInstanceStatus(w http.ResponseWriter, r *http.Request
 	}
 }
 
-func (s *server) createServiceInstance(w http.ResponseWriter, r *http.Request) {
+func (s *server) createInstance(w http.ResponseWriter, r *http.Request) {
 	id := mux.Vars(r)["instance_id"]
-	log.Printf("CreateServiceInstance %s...", id)
+	log.Printf("CreateInstance %s...", id)
 
-	var req api.CreateServiceInstanceRequest
+	var req api.CreateInstanceRequest
 	if err := util.BodyToObject(r, &req); err != nil {
 		log.Printf("[ERROR] error unmarshalling: %v", err)
 		util.WriteErrorResponse(w, http.StatusBadRequest, err)
@@ -151,11 +151,11 @@ func (s *server) createServiceInstance(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-func (s *server) updateServiceInstance(w http.ResponseWriter, r *http.Request) {
+func (s *server) updateInstance(w http.ResponseWriter, r *http.Request) {
 	id := mux.Vars(r)["instance_id"]
-	log.Printf("UpdateServiceInstance %s...", id)
+	log.Printf("UpdateInstance %s...", id)
 
-	var req api.UpdateServiceInstanceRequest
+	var req api.UpdateInstanceRequest
 	if err := util.BodyToObject(r, &req); err != nil {
 		log.Printf("[ERROR] error unmarshalling: %v", err)
 		util.WriteErrorResponse(w, http.StatusBadRequest, err)
@@ -184,13 +184,13 @@ func (s *server) updateServiceInstance(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-func (s *server) removeServiceInstance(w http.ResponseWriter, r *http.Request) {
+func (s *server) removeInstance(w http.ResponseWriter, r *http.Request) {
 	instanceID := mux.Vars(r)["instance_id"]
 	q := r.URL.Query()
 	serviceID := first(q["service_id"])
 	planID := first(q["plan_id"])
 	acceptsIncomplete := first(q["accepts_incomplete"]) == "true"
-	log.Printf("RemoveServiceInstance %s...", instanceID)
+	log.Printf("RemoveInstance %s...", instanceID)
 
 	missing := appendMissingParam(serviceID, "service_id", nil)
 	missing = appendMissingParam(planID, "plan_id", missing)
