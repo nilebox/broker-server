@@ -16,6 +16,6 @@ type BrokerController interface {
 	UpdateInstance(ctx context.Context, instanceID string, acceptsIncomplete bool, req *api.UpdateInstanceRequest) (*api.UpdateInstanceResponse, error)
 	RemoveInstance(ctx context.Context, instanceID, serviceID, planID string, acceptsIncomplete bool) (*api.DeleteInstanceResponse, error)
 
-	CreateBinding(ctx context.Context, instanceID, bindingID string, req *api.BindingRequest) (*api.CreateServiceBindingResponse, error)
+	CreateBinding(ctx context.Context, instanceID, bindingID string, req *api.BindingRequest) (*api.CreateBindingResponse, error)
 	RemoveBinding(ctx context.Context, instanceID, bindingID, serviceID, planID string) error
 }

@@ -95,7 +95,7 @@ func (c *exampleController) RemoveInstance(ctx context.Context, instanceID, serv
 	return nil, nil
 }
 
-func (c *exampleController) CreateBinding(ctx context.Context, instanceID, bindingID string, req *api.BindingRequest) (*api.CreateServiceBindingResponse, error) {
+func (c *exampleController) CreateBinding(ctx context.Context, instanceID, bindingID string, req *api.BindingRequest) (*api.CreateBindingResponse, error) {
 	log := ctx.Value("log").(*zap.Logger)
 	log = log.With(zappers.InstanceID(instanceID), zappers.BindingID(bindingID))
 	log.Info("CreateBinding called")

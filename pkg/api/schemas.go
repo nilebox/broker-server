@@ -5,16 +5,16 @@ import "encoding/json"
 // Schemas represents a broker's schemas for both service instances and service
 // bindings
 type Schemas struct {
-	Instance ServiceInstanceSchema `json:"service_instance"`
-	Binding  ServiceBindingSchema  `json:"service_binding"`
+	Instance InstanceSchema `json:"service_instance"`
+	Binding  BindingSchema  `json:"service_binding"`
 }
 
-type ServiceInstanceSchema struct {
+type InstanceSchema struct {
 	Create Schema `json:"create"`
 	Update Schema `json:"update"`
 }
 
-type ServiceBindingSchema struct {
+type BindingSchema struct {
 	Create Schema `json:"create"`
 }
 

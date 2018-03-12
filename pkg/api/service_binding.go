@@ -1,7 +1,7 @@
 package api
 
-// ServiceBinding represents a binding to a service instance
-type ServiceBinding struct {
+// Binding represents a binding to a service instance
+type Binding struct {
 	ID                string                 `json:"id"`
 	ServiceID         string                 `json:"service_id"`
 	AppID             string                 `json:"app_id"`
@@ -21,9 +21,9 @@ type BindingRequest struct {
 	Parameters   map[string]interface{} `json:"parameters,omitempty"`
 }
 
-// CreateServiceBindingResponse represents a response to a service binding
+// CreateBindingResponse represents a response to a service binding
 // request
-type CreateServiceBindingResponse struct {
+type CreateBindingResponse struct {
 	// SyslogDrainURL string      `json:"syslog_drain_url, omitempty"`
 	Credentials Credential `json:"credentials"`
 }
