@@ -31,7 +31,7 @@ func (c *statefulController) GetInstanceStatus(ctx context.Context, instanceID, 
 		return nil, err
 	}
 	return &api.GetInstanceStatusResponse{
-		State:       string(instanceRecord.State),
+		State:       string(storage.GetOperationState(instanceRecord.State)),
 		Description: string(storage.GetInstanceStateDescription(instanceRecord.State)),
 	}, nil
 }

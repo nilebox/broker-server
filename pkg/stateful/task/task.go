@@ -1,11 +1,15 @@
 package task
 
-type brokerTask struct {
+type BrokerTask interface {
+	Run()
+}
+
+type BrokerTaskRunner struct {
 	State   BrokerTaskState
 	RunFunc func()
 }
 
-func (t *brokerTask) run() {
+func (t *BrokerTaskRunner) Run() {
 	t.State = BrokerTaskStateRunning
 	t.RunFunc()
 	t.State = BrokerTaskStateFinished

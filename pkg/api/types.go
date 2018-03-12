@@ -13,3 +13,11 @@ const (
 	// BindingType is a string constant representation of the binding type
 	BindingType = "bindingType"
 )
+
+type OperationState string
+
+const (
+	OperationStateInProgress OperationState = "in progress"
+	OperationStateSuccess    OperationState = "success"
+	OperationStateFailed     OperationState = "failed"
+)

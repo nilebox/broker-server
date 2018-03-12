@@ -3,6 +3,7 @@ package storage
 import (
 	"encoding/json"
 	"errors"
+	"github.com/nilebox/broker-server/pkg/api"
 )
 
 type InstanceRecord struct {
@@ -51,5 +52,27 @@ func GetInstanceStateDescription(state InstanceState) (InstanceStateDescription,
 		return "", errors.New("Unexpected instance state: " + state)
 
 	}
+}
 
+func IsInProgress(state InstanceState) bool {
+	switch state {
+	case InstanceStateCreateInProgress:
+		return true
+	case InstanceStateUpdateInProgress:
+		return true
+	case InstanceStateDeleteInProgress:
+		return true
+	default:
+		return false
+	}
+}
+
+func GetOperationState(state InstanceState) api.OperationState {
+	switch state {
+	case InstanceStateCreateInProgress:
+		return api.OperationStateInProgress
+	// TODO add the rest InstanceState values
+	default:
+		panic("Unexpected state: " + state)
+	}
 }

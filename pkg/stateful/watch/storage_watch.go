@@ -1,3 +1,9 @@
 package watch
 
-// TODO implement an extension of storage with lease capabilities
+import "github.com/nilebox/broker-server/pkg/stateful/storage"
+
+type StorageWithLease interface {
+	storage.Storage
+	ExtendLease(instances []storage.InstanceRecord) error
+	LeaseAbandonedInstances(maxBatchSize uint32) []storage.InstanceRecord
+}
