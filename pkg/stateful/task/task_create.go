@@ -23,12 +23,22 @@ func NewCreateTask(instance *storage.InstanceRecord, storage storage.Storage, br
 }
 
 func (t *CreateInstanceTask) run() {
-	output, err := t.broker.CreateInstance(t.instance.InstanceId, t.instance.Parameters)
-	if err != nil {
-		t.storage.UpdateInstanceState(t.instance.InstanceId, storage.InstanceStateCreateFailed, err.Error())
+	state, output, err := t.broker.CreateInstance(t.instance.InstanceId, t.instance.Parameters)
+	if err != nil || state == ExecutionStateFailed {
+		// TODO 'err' could mean a temporary error
+		// Shall we have a separate error message for 'Failed' state?
+		errorMessage := ""
+		if err != nil {
+			errorMessage = err.Error()
+		}
+		t.storage.UpdateInstanceState(t.instance.InstanceId, storage.InstanceStateCreateFailed, errorMessage)
 		return
 	}
-	// TODO: persist outputs (add method to storage)
-	_ = output
-	t.storage.UpdateInstanceState(t.instance.InstanceId, storage.InstanceStateCreateSucceeded, "")
+	if state == ExecutionStateSuccess {
+		// TODO: persist outputs (add method to storage)
+		_ = output
+		t.storage.UpdateInstanceState(t.instance.InstanceId, storage.InstanceStateCreateSucceeded, "")
+		return
+	}
+	// If InProgress - nothing to do
 }
