@@ -3,6 +3,7 @@ package stateful
 import (
 	"context"
 	"github.com/nilebox/broker-server/pkg/api"
+	"github.com/nilebox/broker-server/pkg/controller"
 	"github.com/nilebox/broker-server/pkg/stateful/storage"
 	"github.com/nilebox/broker-server/pkg/zappers"
 	"go.uber.org/zap"
@@ -12,6 +13,14 @@ type statefulController struct {
 	appContext context.Context
 	catalog    *api.Catalog
 	storage    storage.Storage
+}
+
+func NewStatefulController(appContext context.Context, catalog *api.Catalog, storage storage.Storage) controller.BrokerController {
+	return &statefulController{
+		appContext: appContext,
+		catalog:    catalog,
+		storage:    storage,
+	}
 }
 
 func (c *statefulController) Catalog(ctx context.Context) (*api.Catalog, error) {
