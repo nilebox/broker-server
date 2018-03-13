@@ -11,10 +11,10 @@ import (
 type submitterStorageDecorator struct {
 	storage     storage.Storage
 	submitter   Submitter
-	taskCreator TaskCreator
+	taskCreator *TaskCreator
 }
 
-func NewSubmitterStorageDecorator(storage storage.Storage, submitter Submitter, taskCreator TaskCreator) storage.Storage {
+func NewSubmitterStorageDecorator(storage storage.Storage, submitter Submitter, taskCreator *TaskCreator) storage.Storage {
 	return &submitterStorageDecorator{
 		storage:     storage,
 		submitter:   submitter,

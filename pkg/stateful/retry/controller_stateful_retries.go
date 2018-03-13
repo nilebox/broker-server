@@ -2,10 +2,13 @@ package retry
 
 import (
 	"context"
+	"github.com/nilebox/broker-server/pkg/stateful/storage"
 	"github.com/nilebox/broker-server/pkg/stateful/task"
 )
 
 type retryController struct {
+	storage       StorageWithLease
+	taskCreator   *task.TaskCreator
 	taskExecutor  *taskExecutor
 	taskScheduler *taskScheduler
 	watchDog      *watchDog
@@ -17,6 +20,8 @@ func NewRetryController(storage StorageWithLease, broker task.Broker) *retryCont
 	taskCreator := task.NewTaskCreator(storage, broker)
 	taskScheduler := NewTaskScheduler(storage, taskExecutor, taskCreator)
 	return &retryController{
+		storage:       storage,
+		taskCreator:   taskCreator,
 		taskExecutor:  taskExecutor,
 		taskScheduler: taskScheduler,
 		watchDog:      watchDog,
@@ -28,6 +33,7 @@ func (c *retryController) Start(ctx context.Context) {
 	go c.watchDog.Run(ctx)
 }
 
-func (c *retryController) Submit(task task.BrokerTask) {
-	c.taskExecutor.Submit(task)
+// CreateStorageWithSubmitter returns a storage decorated with task submitter
+func (c *retryController) CreateStorageWithSubmitter() storage.Storage {
+	return task.NewSubmitterStorageDecorator(c.storage, c.taskExecutor, c.taskCreator)
 }
