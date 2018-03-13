@@ -69,7 +69,6 @@ func (c *statefulController) CreateInstance(ctx context.Context, instanceID stri
 	if err != nil {
 		return nil, err
 	}
-	// TODO add a logic for kicking off the operation or leave it to the storage implementation?
 	return &api.CreateInstanceResponse{
 		Async: true,
 	}, nil
@@ -90,7 +89,6 @@ func (c *statefulController) UpdateInstance(ctx context.Context, instanceID stri
 	if err != nil {
 		return nil, err
 	}
-	// TODO add a logic for kicking off the operation or leave it to the storage implementation?
 
 	return &api.UpdateInstanceResponse{
 		Async: true,
@@ -110,7 +108,6 @@ func (c *statefulController) RemoveInstance(ctx context.Context, instanceID, ser
 	if err != nil {
 		return nil, err
 	}
-	// TODO add a logic for kicking off the operation or leave it to the storage implementation?
 
 	return &api.DeleteInstanceResponse{
 		Async: true,
