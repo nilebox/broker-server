@@ -15,8 +15,9 @@ func NewCreateTask(instance *storage.InstanceRecord, storage storage.Storage, br
 		broker:   broker,
 	}
 	runner := BrokerTaskRunner{
-		State:   BrokerTaskStateIdle,
-		RunFunc: task.run,
+		instance: instance,
+		state:    BrokerTaskStateIdle,
+		RunFunc:  task.run,
 	}
 	return &runner
 }

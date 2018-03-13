@@ -10,6 +10,13 @@ type TaskCreator struct {
 	broker  Broker
 }
 
+func NewTaskCreator(storage storage.Storage, broker Broker) *TaskCreator {
+	return &TaskCreator{
+		storage: storage,
+		broker:  broker,
+	}
+}
+
 func (tc *TaskCreator) CreateTaskFor(instance *storage.InstanceRecord) (BrokerTask, error) {
 	switch instance.State {
 	case storage.InstanceStateCreateInProgress:
