@@ -6,14 +6,18 @@ import (
 	"github.com/nilebox/broker-server/pkg/api"
 )
 
-type InstanceRecord struct {
+type InstanceParameters struct {
 	InstanceId string
 	ServiceId  string
 	PlanId     string
 	Parameters json.RawMessage
 	Outputs    json.RawMessage
-	State      InstanceState
-	Error      string
+}
+
+type InstanceRecord struct {
+	InstanceParameters
+	State InstanceState
+	Error string
 }
 
 type InstanceState string
@@ -50,7 +54,7 @@ func GetInstanceStateDescription(state InstanceState) (InstanceStateDescription,
 		return InstanceStateDescriptionCreateInProgress, nil
 	// TODO: add remaining state descriptions
 	default:
-		return "", errors.New("Unexpected instance state: " + state)
+		return "", errors.New("Unexpected instance state: " + string(state))
 
 	}
 }

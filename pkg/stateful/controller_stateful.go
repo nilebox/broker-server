@@ -39,9 +39,14 @@ func (c *statefulController) GetInstanceStatus(ctx context.Context, instanceID, 
 	if err != nil {
 		return nil, err
 	}
+	instanceStateDescription, err := storage.GetInstanceStateDescription(instanceRecord.State)
+	if err != nil {
+		return nil, err
+	}
+
 	return &api.GetInstanceStatusResponse{
 		State:       string(storage.GetOperationState(instanceRecord.State)),
-		Description: string(storage.GetInstanceStateDescription(instanceRecord.State)),
+		Description: string(instanceStateDescription),
 	}, nil
 }
 
@@ -60,14 +65,13 @@ func (c *statefulController) CreateInstance(ctx context.Context, instanceID stri
 	//	// TODO return 409
 	//}
 
-	instanceRecord := &storage.InstanceRecord{
+	instanceParameters := &storage.InstanceParameters{
 		InstanceId: instanceID,
 		ServiceId:  req.ServiceID,
 		PlanId:     req.PlanID,
 		Parameters: req.Parameters,
-		State:      storage.InstanceStateCreateInProgress,
 	}
-	err := c.storage.CreateInstance(instanceRecord)
+	err := c.storage.CreateInstance(instanceParameters)
 	if err != nil {
 		return nil, err
 	}
@@ -86,14 +90,16 @@ func (c *statefulController) UpdateInstance(ctx context.Context, instanceID stri
 		return nil, err
 	}
 	// TODO check for instance status first (should not have operations in progress)
-	instance.State = storage.InstanceStateUpdateInProgress
+	// instance.State = storage.InstanceStateUpdateInProgress
 	if req.PlanID != nil {
 		instance.PlanId = *req.PlanID
 	}
 	if req.Parameters != nil {
 		instance.Parameters = req.Parameters
 	}
-	err = c.storage.UpdateInstance(instance)
+
+	// Discard the state stuff
+	err = c.storage.UpdateInstance(&instance.InstanceParameters)
 	if err != nil {
 		return nil, err
 	}
