@@ -62,6 +62,8 @@ func (c *statefulController) CreateInstance(ctx context.Context, instanceID stri
 
 	instanceRecord := &storage.InstanceRecord{
 		InstanceId: instanceID,
+		ServiceId:  req.ServiceID,
+		PlanId:     req.PlanID,
 		Parameters: req.Parameters,
 		State:      storage.InstanceStateCreateInProgress,
 	}
@@ -79,13 +81,19 @@ func (c *statefulController) UpdateInstance(ctx context.Context, instanceID stri
 	log = log.With(zappers.InstanceID(instanceID))
 	log.Info("UpdateInstance called")
 
-	_, err := c.storage.GetInstance(instanceID)
+	instance, err := c.storage.GetInstance(instanceID)
 	if err != nil {
 		return nil, err
 	}
 	// TODO check for instance status first (should not have operations in progress)
-	// TODO add support for plan change
-	err = c.storage.UpdateInstance(instanceID, req.Parameters, storage.InstanceStateUpdateInProgress)
+	instance.State = storage.InstanceStateUpdateInProgress
+	if req.PlanID != nil {
+		instance.PlanId = *req.PlanID
+	}
+	if req.Parameters != nil {
+		instance.Parameters = req.Parameters
+	}
+	err = c.storage.UpdateInstance(instance)
 	if err != nil {
 		return nil, err
 	}

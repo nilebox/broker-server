@@ -8,9 +8,10 @@ import (
 
 type InstanceRecord struct {
 	InstanceId string
-	// ServiceId + PlanId?
-	// resourceType ResourceType
+	ServiceId  string
+	PlanId     string
 	Parameters json.RawMessage
+	Outputs    json.RawMessage
 	State      InstanceState
 	Error      string
 }

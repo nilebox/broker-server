@@ -35,9 +35,9 @@ func (t *CreateInstanceTask) run() {
 		return
 	}
 	if state == ExecutionStateSuccess {
-		// TODO: persist outputs (add method to storage)
-		_ = output
-		t.storage.UpdateInstanceState(t.instance.InstanceId, storage.InstanceStateCreateSucceeded, "")
+		t.instance.Outputs = output
+		t.instance.State = storage.InstanceStateCreateSucceeded
+		t.storage.UpdateInstance(t.instance)
 		return
 	}
 	// If InProgress - nothing to do
