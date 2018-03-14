@@ -4,7 +4,6 @@ import (
 	"context"
 	"time"
 
-	"github.com/nilebox/broker-server/pkg/stateful/storage"
 	"github.com/nilebox/broker-server/pkg/stateful/task"
 )
 
@@ -75,9 +74,9 @@ func (d *watchDog) checkTasks() {
 	}
 }
 func (d *watchDog) extendLease(tasks []task.BrokerTask) error {
-	instances := make([]*storage.InstanceRecord, len(tasks))
+	instanceIds := make([]string, len(tasks))
 	for i, t := range tasks {
-		instances[i] = t.Instance()
+		instanceIds[i] = t.InstanceId()
 	}
-	return d.storage.ExtendLease(instances)
+	return d.storage.ExtendLease(instanceIds)
 }
