@@ -1,8 +1,6 @@
 package task
 
 import (
-	"encoding/json"
-
 	"github.com/nilebox/broker-server/pkg/stateful/storage"
 )
 

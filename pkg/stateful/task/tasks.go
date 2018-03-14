@@ -25,6 +25,6 @@ func (tc *TaskCreator) CreateTaskFor(instance *storage.InstanceRecord) (BrokerTa
 	// Add missing in progress states
 	default:
 		// There is no operation in progress.
-		return nil, errors.New("Instance is not in progress: " + instance.State)
+		return nil, errors.New("Instance is not in progress: " + string(instance.State))
 	}
 }
