@@ -33,8 +33,11 @@ func (s *taskScheduler) Run(ctx context.Context) {
 	time.Sleep(s.initialDelay)
 
 	for {
-		instances := s.storage.LeaseAbandonedInstances(maxBatchSize)
-		if len(instances) != 0 {
+		instances, err := s.storage.LeaseAbandonedInstances(maxBatchSize)
+		if err != nil {
+			// TODO log error
+		}
+		if err == nil && len(instances) != 0 {
 			s.submitTasks(instances)
 		}
 
