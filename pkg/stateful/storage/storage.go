@@ -14,7 +14,7 @@ const (
 type Storage interface {
 	CreateInstance(instance *InstanceSpec) error
 	UpdateInstance(instance *InstanceSpec) error
-	UpdateInstanceState(instanceId string, state InstanceState, err string) error
+	DeleteInstance(instanceId string) error
 	GetInstance(instanceId string) (*InstanceRecord, error)
 	// TODO add methods for storing "instance outputs"
 	// TODO add storage methods for bindings

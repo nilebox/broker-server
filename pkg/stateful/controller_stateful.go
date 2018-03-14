@@ -119,7 +119,7 @@ func (c *statefulController) RemoveInstance(ctx context.Context, instanceID, ser
 	if err != nil {
 		return nil, err
 	}
-	err = c.storage.UpdateInstanceState(instanceID, storage.InstanceStateDeleteInProgress, "")
+	err = c.storage.DeleteInstance(instanceID)
 	if err != nil {
 		return nil, err
 	}
