@@ -4,6 +4,6 @@ import "github.com/nilebox/broker-server/pkg/stateful/storage"
 
 type StorageWithLease interface {
 	storage.Storage
-	ExtendLease(instances []*storage.InstanceRecord) error
+	ExtendLease(instanceIds []string) error
 	LeaseAbandonedInstances(maxBatchSize uint32) ([]*storage.InstanceRecord, error)
 }

@@ -2,6 +2,7 @@ package task
 
 import (
 	"errors"
+
 	"github.com/nilebox/broker-server/pkg/stateful/storage"
 )
 
@@ -20,7 +21,7 @@ func NewTaskCreator(storage storage.Storage, broker Broker) *TaskCreator {
 func (tc *TaskCreator) CreateTaskFor(instance *storage.InstanceRecord) (BrokerTask, error) {
 	switch instance.State {
 	case storage.InstanceStateCreateInProgress:
-		return NewCreateTask(instance, tc.storage, tc.broker), nil
+		return NewCreateTask(instance.InstanceId, tc.storage, tc.broker), nil
 	// Add missing in progress states
 	default:
 		// There is no operation in progress.

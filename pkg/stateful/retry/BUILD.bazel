@@ -1,0 +1,18 @@
+load("@io_bazel_rules_go//go:def.bzl", "go_library")
+
+go_library(
+    name = "go_default_library",
+    srcs = [
+        "controller_stateful_retries.go",
+        "storage_lease.go",
+        "task_executor.go",
+        "task_scheduler.go",
+        "watch_dog.go",
+    ],
+    importpath = "github.com/nilebox/broker-server/pkg/stateful/retry",
+    visibility = ["//visibility:public"],
+    deps = [
+        "//pkg/stateful/storage:go_default_library",
+        "//pkg/stateful/task:go_default_library",
+    ],
+)

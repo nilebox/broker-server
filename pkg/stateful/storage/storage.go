@@ -12,8 +12,8 @@ const (
 )
 
 type Storage interface {
-	CreateInstance(instance *InstanceParameters) error
-	UpdateInstance(instance *InstanceParameters) error
+	CreateInstance(instance *InstanceSpec) error
+	UpdateInstance(instance *InstanceSpec) error
 	UpdateInstanceState(instanceId string, state InstanceState, err string) error
 	GetInstance(instanceId string) (*InstanceRecord, error)
 	// TODO add methods for storing "instance outputs"

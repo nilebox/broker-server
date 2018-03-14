@@ -3,10 +3,11 @@ package storage
 import (
 	"encoding/json"
 	"errors"
+
 	"github.com/nilebox/broker-server/pkg/api"
 )
 
-type InstanceParameters struct {
+type InstanceSpec struct {
 	InstanceId string
 	ServiceId  string
 	PlanId     string
@@ -15,7 +16,7 @@ type InstanceParameters struct {
 }
 
 type InstanceRecord struct {
-	InstanceParameters
+	InstanceSpec
 	State InstanceState
 	Error string
 }

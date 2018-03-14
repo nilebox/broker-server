@@ -2,6 +2,7 @@ package task
 
 import (
 	"encoding/json"
+
 	"github.com/nilebox/broker-server/pkg/stateful/storage"
 )
 
@@ -22,20 +23,21 @@ func NewSubmitterStorageDecorator(storage storage.Storage, submitter Submitter, 
 	}
 }
 
-func (d *submitterStorageDecorator) CreateInstance(instance *storage.InstanceRecord) error {
-	err := d.storage.CreateInstance(instance)
+func (d *submitterStorageDecorator) CreateInstance(instanceSpec *storage.InstanceSpec) error {
+	err := d.storage.CreateInstance(instanceSpec)
 	if err != nil {
 		return err
 	}
-	return d.submitInstance(instance)
+
+	return d.submitInstanceId(instanceSpec.InstanceId)
 }
 
-func (d *submitterStorageDecorator) UpdateInstance(instanceId string, parameters json.RawMessage, state storage.InstanceState) error {
-	err := d.storage.UpdateInstance(instanceId, parameters, state)
+func (d *submitterStorageDecorator) UpdateInstance(instance *storage.InstanceSpec) error {
+	err := d.storage.UpdateInstance(instance)
 	if err != nil {
 		return err
 	}
-	return d.submitInstanceId(instanceId)
+	return d.submitInstanceId(instance.InstanceId)
 }
 
 func (d *submitterStorageDecorator) UpdateInstanceState(instanceId string, state storage.InstanceState, e string) error {

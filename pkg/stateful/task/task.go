@@ -1,21 +1,19 @@
 package task
 
-import "github.com/nilebox/broker-server/pkg/stateful/storage"
-
 type BrokerTask interface {
-	Instance() *storage.InstanceRecord
+	InstanceId() string
 	State() BrokerTaskState
 	Run()
 }
 
 type BrokerTaskRunner struct {
-	instance *storage.InstanceRecord
-	state    BrokerTaskState
-	RunFunc  func()
+	instanceId string
+	state      BrokerTaskState
+	RunFunc    func()
 }
 
-func (t *BrokerTaskRunner) Instance() *storage.InstanceRecord {
-	return t.instance
+func (t *BrokerTaskRunner) InstanceId() string {
+	return t.instanceId
 }
 
 func (t *BrokerTaskRunner) State() BrokerTaskState {

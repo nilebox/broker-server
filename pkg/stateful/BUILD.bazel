@@ -1,0 +1,22 @@
+load("@io_bazel_rules_go//go:def.bzl", "go_library", "go_test")
+
+go_library(
+    name = "go_default_library",
+    srcs = ["controller_stateful.go"],
+    importpath = "github.com/nilebox/broker-server/pkg/stateful",
+    visibility = ["//visibility:public"],
+    deps = [
+        "//pkg/api:go_default_library",
+        "//pkg/controller:go_default_library",
+        "//pkg/stateful/storage:go_default_library",
+        "//pkg/zappers:go_default_library",
+        "//vendor/go.uber.org/zap:go_default_library",
+    ],
+)
+
+go_test(
+    name = "go_default_test",
+    srcs = ["controller_stateful_test.go"],
+    embed = [":go_default_library"],
+    deps = ["//pkg/controller:go_default_library"],
+)

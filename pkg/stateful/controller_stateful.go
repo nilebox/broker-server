@@ -2,6 +2,7 @@ package stateful
 
 import (
 	"context"
+
 	"github.com/nilebox/broker-server/pkg/api"
 	"github.com/nilebox/broker-server/pkg/controller"
 	"github.com/nilebox/broker-server/pkg/stateful/storage"
@@ -65,7 +66,7 @@ func (c *statefulController) CreateInstance(ctx context.Context, instanceID stri
 	//	// TODO return 409
 	//}
 
-	instanceParameters := &storage.InstanceParameters{
+	instanceParameters := &storage.InstanceSpec{
 		InstanceId: instanceID,
 		ServiceId:  req.ServiceID,
 		PlanId:     req.PlanID,
@@ -99,7 +100,7 @@ func (c *statefulController) UpdateInstance(ctx context.Context, instanceID stri
 	}
 
 	// Discard the state stuff
-	err = c.storage.UpdateInstance(&instance.InstanceParameters)
+	err = c.storage.UpdateInstance(&instance.InstanceSpec)
 	if err != nil {
 		return nil, err
 	}
