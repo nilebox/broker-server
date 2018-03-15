@@ -13,14 +13,14 @@ const (
 )
 
 type taskScheduler struct {
-	storage      StorageWithLease
+	storage      storage.StorageWithLease
 	taskExecutor *taskExecutor
 	taskCreator  *task.TaskCreator
 	initialDelay time.Duration
 	sleepDelay   time.Duration
 }
 
-func NewTaskScheduler(storage StorageWithLease, taskExecutor *taskExecutor, taskCreator *task.TaskCreator) *taskScheduler {
+func NewTaskScheduler(storage storage.StorageWithLease, taskExecutor *taskExecutor, taskCreator *task.TaskCreator) *taskScheduler {
 	return &taskScheduler{
 		storage:      storage,
 		taskExecutor: taskExecutor,
