@@ -3,13 +3,13 @@ package task
 type BrokerTask interface {
 	InstanceId() string
 	State() BrokerTaskState
-	Run()
+	Run() error
 }
 
 type BrokerTaskRunner struct {
 	instanceId string
 	state      BrokerTaskState
-	RunFunc    func()
+	RunFunc    func() error
 }
 
 func (t *BrokerTaskRunner) InstanceId() string {
@@ -20,10 +20,14 @@ func (t *BrokerTaskRunner) State() BrokerTaskState {
 	return t.state
 }
 
-func (t *BrokerTaskRunner) Run() {
+func (t *BrokerTaskRunner) Run() error {
+	defer func() {
+		t.state = BrokerTaskStateFinished
+	}()
+
 	t.state = BrokerTaskStateRunning
-	t.RunFunc()
-	t.state = BrokerTaskStateFinished
+	err := t.RunFunc()
+	return err
 }
 
 type BrokerTaskState string

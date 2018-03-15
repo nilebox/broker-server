@@ -15,5 +15,9 @@ func NewTaskExecutor(watchDog *watchDog) *taskExecutor {
 func (e *taskExecutor) Submit(task task.BrokerTask) {
 	e.watchDog.add(task)
 	// TODO have a limited queue (pool) instead?
-	go task.Run()
+	go func() {
+		err := task.Run()
+		// TODO log err
+		_ = err
+	}()
 }

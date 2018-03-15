@@ -16,7 +16,7 @@ type InstanceSpec struct {
 }
 
 type InstanceRecord struct {
-	InstanceSpec
+	Spec  InstanceSpec
 	State InstanceState
 	Error string
 }

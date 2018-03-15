@@ -1,14 +1,17 @@
 package task
 
-import "github.com/nilebox/broker-server/pkg/stateful/storage"
+import (
+	"github.com/nilebox/broker-server/pkg/stateful/retry"
+	"github.com/nilebox/broker-server/pkg/stateful/storage"
+)
 
 type CreateInstanceTask struct {
 	instanceId string
-	storage    storage.Storage
+	storage    retry.StorageWithLease
 	broker     Broker
 }
 
-func NewCreateTask(instanceId string, storage storage.Storage, broker Broker) BrokerTask {
+func NewCreateTask(instanceId string, storage retry.StorageWithLease, broker Broker) BrokerTask {
 	task := CreateInstanceTask{
 		instanceId: instanceId,
 		storage:    storage,
@@ -22,13 +25,13 @@ func NewCreateTask(instanceId string, storage storage.Storage, broker Broker) Br
 	return &runner
 }
 
-func (t *CreateInstanceTask) run() {
+func (t *CreateInstanceTask) run() error {
 	instance, err := t.storage.GetInstance(t.instanceId)
 	if err != nil {
-		// TODO Log error
-		return
+		return err
 	}
-	state, output, err := t.broker.CreateInstance(t.instanceId, instance.Parameters)
+	t.storage.UpdateInstanceState(t.instanceId, storage.InstanceStateCreateInProgress, "")
+	state, output, err := t.broker.CreateInstance(t.instanceId, instance.Spec.Parameters)
 	if err != nil || state == ExecutionStateFailed {
 		// TODO 'err' could mean a temporary error
 		// Shall we have a separate error message for 'Failed' state?
@@ -37,22 +40,20 @@ func (t *CreateInstanceTask) run() {
 			errorMessage = err.Error()
 		}
 		t.storage.UpdateInstanceState(t.instanceId, storage.InstanceStateCreateFailed, errorMessage)
-		return
+		return err
 	}
 	if state == ExecutionStateSuccess {
-		instance.Outputs = output
-		instance.State = storage.InstanceStateCreateSucceeded
-		err = t.storage.UpdateInstance(&instance.InstanceSpec)
+		instance.Spec.Outputs = output
+		err = t.storage.UpdateInstance(&instance.Spec)
 		if err != nil {
-			// TODO Log error
-			return
+			return err
 		}
 		err = t.storage.UpdateInstanceState(t.instanceId, storage.InstanceStateCreateSucceeded, "")
 		if err != nil {
-			// TODO Log error
-			return
+			return err
 		}
-		return
 	}
-	// If InProgress - nothing to do
+
+	// InProgress - nothing to do
+	return nil
 }
