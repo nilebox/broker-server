@@ -134,8 +134,14 @@ func (c *statefulController) CreateBinding(ctx context.Context, instanceID, bind
 	log = log.With(zappers.InstanceID(instanceID), zappers.BindingID(bindingID))
 	log.Info("CreateBinding called")
 
-	// TODO
-	return nil, nil
+	// TODO implement a proper binding support
+	instance, err := c.storage.GetInstance(instanceID)
+	if err != nil {
+		return nil, err
+	}
+	return &api.CreateBindingResponse{
+		Credentials: instance.Spec.Outputs,
+	}, nil
 }
 
 func (c *statefulController) RemoveBinding(ctx context.Context, instanceID, bindingID, serviceID, planID string) error {
