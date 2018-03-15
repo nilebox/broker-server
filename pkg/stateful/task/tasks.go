@@ -22,7 +22,10 @@ func (tc *TaskCreator) CreateTaskFor(instance *storage.InstanceRecord) (BrokerTa
 	switch instance.State {
 	case storage.InstanceStateCreateInProgress:
 		return NewCreateTask(instance.Spec.InstanceId, tc.storage, tc.broker), nil
-	// Add missing in progress states
+	case storage.InstanceStateUpdateInProgress:
+		return NewUpdateTask(instance.Spec.InstanceId, tc.storage, tc.broker), nil
+	case storage.InstanceStateDeleteInProgress:
+		return NewDeleteTask(instance.Spec.InstanceId, tc.storage, tc.broker), nil
 	default:
 		// There is no operation in progress.
 		return nil, errors.New("Instance is not in progress: " + string(instance.State))
