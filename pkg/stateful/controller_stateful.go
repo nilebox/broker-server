@@ -93,14 +93,14 @@ func (c *statefulController) UpdateInstance(ctx context.Context, instanceID stri
 	// TODO check for instance status first (should not have operations in progress)
 	// instance.State = storage.InstanceStateUpdateInProgress
 	if req.PlanID != nil {
-		instance.PlanId = *req.PlanID
+		instance.Spec.PlanId = *req.PlanID
 	}
 	if req.Parameters != nil {
-		instance.Parameters = req.Parameters
+		instance.Spec.Parameters = req.Parameters
 	}
 
 	// Discard the state stuff
-	err = c.storage.UpdateInstance(&instance.InstanceSpec)
+	err = c.storage.UpdateInstance(&instance.Spec)
 	if err != nil {
 		return nil, err
 	}

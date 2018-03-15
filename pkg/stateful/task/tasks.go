@@ -7,11 +7,11 @@ import (
 )
 
 type TaskCreator struct {
-	storage storage.Storage
+	storage storage.StorageWithLease
 	broker  Broker
 }
 
-func NewTaskCreator(storage storage.Storage, broker Broker) *TaskCreator {
+func NewTaskCreator(storage storage.StorageWithLease, broker Broker) *TaskCreator {
 	return &TaskCreator{
 		storage: storage,
 		broker:  broker,
@@ -21,7 +21,7 @@ func NewTaskCreator(storage storage.Storage, broker Broker) *TaskCreator {
 func (tc *TaskCreator) CreateTaskFor(instance *storage.InstanceRecord) (BrokerTask, error) {
 	switch instance.State {
 	case storage.InstanceStateCreateInProgress:
-		return NewCreateTask(instance.InstanceId, tc.storage, tc.broker), nil
+		return NewCreateTask(instance.Spec.InstanceId, tc.storage, tc.broker), nil
 	// Add missing in progress states
 	default:
 		// There is no operation in progress.
