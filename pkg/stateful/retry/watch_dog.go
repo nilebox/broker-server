@@ -19,8 +19,8 @@ func NewWatchDog(storage storage.StorageWithLease) *watchDog {
 	return &watchDog{
 		storage:      storage,
 		tasks:        make([]task.BrokerTask, 0, 10),
-		initialDelay: time.Second * 60,
-		sleepDelay:   time.Second * 60,
+		initialDelay: time.Second * 10,
+		sleepDelay:   time.Second * 5,
 	}
 }
 

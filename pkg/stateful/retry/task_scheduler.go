@@ -25,8 +25,8 @@ func NewTaskScheduler(storage storage.StorageWithLease, taskExecutor *taskExecut
 		storage:      storage,
 		taskExecutor: taskExecutor,
 		taskCreator:  taskCreator,
-		initialDelay: time.Second * 60,
-		sleepDelay:   time.Second * 60,
+		initialDelay: time.Second * 10,
+		sleepDelay:   time.Second * 10,
 	}
 }
 

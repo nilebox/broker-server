@@ -53,10 +53,24 @@ func GetInstanceStateDescription(state InstanceState) (InstanceStateDescription,
 	switch state {
 	case InstanceStateCreateInProgress:
 		return InstanceStateDescriptionCreateInProgress, nil
-	// TODO: add remaining state descriptions
+	case InstanceStateCreateSucceeded:
+		return InstanceStateDescriptionCreateSucceeded, nil
+	case InstanceStateCreateFailed:
+		return InstanceStateDescriptionCreateFailed, nil
+	case InstanceStateUpdateInProgress:
+		return InstanceStateDescriptionUpdateInProgress, nil
+	case InstanceStateUpdateSucceeded:
+		return InstanceStateDescriptionUpdateSucceeded, nil
+	case InstanceStateUpdateFailed:
+		return InstanceStateDescriptionUpdateFailed, nil
+	case InstanceStateDeleteInProgress:
+		return InstanceStateDescriptionDeleteInProgress, nil
+	case InstanceStateDeleteSucceeded:
+		return InstanceStateDescriptionDeleteSucceeded, nil
+	case InstanceStateDeleteFailed:
+		return InstanceStateDescriptionDeleteFailed, nil
 	default:
 		return "", errors.New("Unexpected instance state: " + string(state))
-
 	}
 }
 
@@ -77,7 +91,22 @@ func GetOperationState(state InstanceState) api.OperationState {
 	switch state {
 	case InstanceStateCreateInProgress:
 		return api.OperationStateInProgress
-	// TODO add the rest InstanceState values
+	case InstanceStateCreateSucceeded:
+		return api.OperationStateSuccess
+	case InstanceStateCreateFailed:
+		return api.OperationStateFailed
+	case InstanceStateUpdateInProgress:
+		return api.OperationStateInProgress
+	case InstanceStateUpdateSucceeded:
+		return api.OperationStateSuccess
+	case InstanceStateUpdateFailed:
+		return api.OperationStateFailed
+	case InstanceStateDeleteInProgress:
+		return api.OperationStateInProgress
+	case InstanceStateDeleteSucceeded:
+		return api.OperationStateSuccess
+	case InstanceStateDeleteFailed:
+		return api.OperationStateFailed
 	default:
 		panic("Unexpected state: " + state)
 	}
