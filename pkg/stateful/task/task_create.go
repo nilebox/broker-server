@@ -1,17 +1,16 @@
 package task
 
 import (
-	"github.com/nilebox/broker-server/pkg/stateful/retry"
 	"github.com/nilebox/broker-server/pkg/stateful/storage"
 )
 
 type CreateInstanceTask struct {
 	instanceId string
-	storage    retry.StorageWithLease
+	storage    storage.StorageWithLease
 	broker     Broker
 }
 
-func NewCreateTask(instanceId string, storage retry.StorageWithLease, broker Broker) BrokerTask {
+func NewCreateTask(instanceId string, storage storage.StorageWithLease, broker Broker) BrokerTask {
 	task := CreateInstanceTask{
 		instanceId: instanceId,
 		storage:    storage,

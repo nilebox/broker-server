@@ -2,14 +2,13 @@ package task
 
 import (
 	"encoding/json"
-	"github.com/nilebox/broker-server/pkg/stateful/retry"
 	"github.com/nilebox/broker-server/pkg/stateful/storage"
 )
 
 // brokerStorageDecorator is a decorator around the Broker
 // interface, which automatically submits state updates to the storage
 type brokerStorageDecorator struct {
-	storage retry.StorageWithLease
+	storage storage.StorageWithLease
 	broker  Broker
 }
 

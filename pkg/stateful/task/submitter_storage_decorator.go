@@ -1,7 +1,6 @@
 package task
 
 import (
-	"github.com/nilebox/broker-server/pkg/stateful/retry"
 	"github.com/nilebox/broker-server/pkg/stateful/storage"
 )
 
@@ -9,12 +8,12 @@ import (
 // interface, which submits the broker task every time the instance gets
 // created or updated
 type submitterStorageDecorator struct {
-	storage     retry.StorageWithLease
+	storage     storage.StorageWithLease
 	submitter   Submitter
 	taskCreator *TaskCreator
 }
 
-func NewSubmitterStorageDecorator(storage retry.StorageWithLease, submitter Submitter, taskCreator *TaskCreator) storage.Storage {
+func NewSubmitterStorageDecorator(storage storage.StorageWithLease, submitter Submitter, taskCreator *TaskCreator) storage.Storage {
 	return &submitterStorageDecorator{
 		storage:     storage,
 		submitter:   submitter,
