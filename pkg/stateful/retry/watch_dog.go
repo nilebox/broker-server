@@ -4,17 +4,18 @@ import (
 	"context"
 	"time"
 
+	"github.com/nilebox/broker-server/pkg/stateful/storage"
 	"github.com/nilebox/broker-server/pkg/stateful/task"
 )
 
 type watchDog struct {
-	storage      StorageWithLease
+	storage      storage.StorageWithLease
 	tasks        []task.BrokerTask
 	initialDelay time.Duration
 	sleepDelay   time.Duration
 }
 
-func NewWatchDog(storage StorageWithLease) *watchDog {
+func NewWatchDog(storage storage.StorageWithLease) *watchDog {
 	return &watchDog{
 		storage:      storage,
 		tasks:        make([]task.BrokerTask, 0, 10),

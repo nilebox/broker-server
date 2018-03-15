@@ -8,14 +8,14 @@ import (
 )
 
 type retryController struct {
-	storage       StorageWithLease
+	storage       storage.StorageWithLease
 	taskCreator   *task.TaskCreator
 	taskExecutor  *taskExecutor
 	taskScheduler *taskScheduler
 	watchDog      *watchDog
 }
 
-func NewRetryController(storage StorageWithLease, broker task.Broker) *retryController {
+func NewRetryController(storage storage.StorageWithLease, broker task.Broker) *retryController {
 	watchDog := NewWatchDog(storage)
 	taskExecutor := NewTaskExecutor(watchDog)
 	taskCreator := task.NewTaskCreator(storage, broker)
