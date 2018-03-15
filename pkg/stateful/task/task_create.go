@@ -1,6 +1,7 @@
 package task
 
 import (
+	"errors"
 	"github.com/nilebox/broker-server/pkg/stateful/storage"
 )
 
@@ -29,7 +30,9 @@ func (t *CreateInstanceTask) run() error {
 	if err != nil {
 		return err
 	}
-	t.storage.UpdateInstanceState(t.instanceId, storage.InstanceStateCreateInProgress, "")
+	if instance.State != storage.InstanceStateCreateInProgress {
+		return errors.New("Unexpected status: " + instance.State)
+	}
 	state, output, err := t.broker.CreateInstance(t.instanceId, instance.Spec.Parameters)
 	if err != nil || state == ExecutionStateFailed {
 		// TODO 'err' could mean a temporary error
