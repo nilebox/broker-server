@@ -31,7 +31,7 @@ func (t *CreateInstanceTask) run() error {
 		return err
 	}
 	if instance.State != storage.InstanceStateCreateInProgress {
-		return errors.New("Unexpected status: " + instance.State)
+		return errors.New("Unexpected status: " + string(instance.State))
 	}
 	output, err := t.broker.CreateInstance(t.instanceId, instance.Spec.Parameters)
 	if err != nil {
