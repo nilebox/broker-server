@@ -33,7 +33,7 @@ func (t *DeleteInstanceTask) run() error {
 	if instance.State != storage.InstanceStateDeleteInProgress {
 		return errors.New("Unexpected status: " + string(instance.State))
 	}
-	output, err := t.broker.DeleteInstance(t.instanceId, instance.Spec.Parameters)
+	err = t.broker.DeleteInstance(t.instanceId, instance.Spec.Parameters)
 	if err != nil {
 		// TODO 'err' could mean a temporary error
 		// Shall we have a separate error message for 'Failed' state?
@@ -45,10 +45,6 @@ func (t *DeleteInstanceTask) run() error {
 		return err
 	}
 
-	err = t.storage.UpdateInstanceOutputs(t.instanceId, output)
-	if err != nil {
-		return err
-	}
 	err = t.storage.UpdateInstanceState(t.instanceId, storage.InstanceStateDeleteSucceeded, "")
 	if err != nil {
 		return err
