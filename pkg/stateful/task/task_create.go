@@ -45,8 +45,7 @@ func (t *CreateInstanceTask) run() error {
 		return err
 	}
 
-	instance.Spec.Outputs = output
-	err = t.storage.UpdateInstance(&instance.Spec)
+	err = t.storage.UpdateInstanceOutputs(t.instanceId, output)
 	if err != nil {
 		return err
 	}
