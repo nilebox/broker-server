@@ -33,8 +33,8 @@ func (t *CreateInstanceTask) run() error {
 	if instance.State != storage.InstanceStateCreateInProgress {
 		return errors.New("Unexpected status: " + instance.State)
 	}
-	state, output, err := t.broker.CreateInstance(t.instanceId, instance.Spec.Parameters)
-	if err != nil || state == ExecutionStateFailed {
+	output, err := t.broker.CreateInstance(t.instanceId, instance.Spec.Parameters)
+	if err != nil {
 		// TODO 'err' could mean a temporary error
 		// Shall we have a separate error message for 'Failed' state?
 		errorMessage := ""
@@ -44,18 +44,15 @@ func (t *CreateInstanceTask) run() error {
 		t.storage.UpdateInstanceState(t.instanceId, storage.InstanceStateCreateFailed, errorMessage)
 		return err
 	}
-	if state == ExecutionStateSuccess {
-		instance.Spec.Outputs = output
-		err = t.storage.UpdateInstance(&instance.Spec)
-		if err != nil {
-			return err
-		}
-		err = t.storage.UpdateInstanceState(t.instanceId, storage.InstanceStateCreateSucceeded, "")
-		if err != nil {
-			return err
-		}
-	}
 
-	// InProgress - nothing to do
+	instance.Spec.Outputs = output
+	err = t.storage.UpdateInstance(&instance.Spec)
+	if err != nil {
+		return err
+	}
+	err = t.storage.UpdateInstanceState(t.instanceId, storage.InstanceStateCreateSucceeded, "")
+	if err != nil {
+		return err
+	}
 	return nil
 }
