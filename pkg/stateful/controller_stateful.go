@@ -61,7 +61,7 @@ func (c *statefulController) CreateInstance(ctx context.Context, instanceID stri
 	instance, err := c.storage.GetInstance(instanceID)
 	if err != nil {
 		if !storage.IsDeletedError(err) {
-			return nil, controller.NewInternalServerError(error.Error())
+			return nil, controller.NewInternalServerError(err.Error())
 		}
 	} else {
 		if instance.State != storage.InstanceStateDeleteSucceeded {
@@ -93,7 +93,7 @@ func (c *statefulController) UpdateInstance(ctx context.Context, instanceID stri
 	instance, err := c.storage.GetInstance(instanceID)
 	if err != nil {
 		if !storage.IsDeletedError(err) {
-			return nil, controller.NewInternalServerError(error.Error())
+			return nil, controller.NewInternalServerError(err.Error())
 		}
 	} else {
 		if !storage.CanBeUpdated(instance.State) {
