@@ -3,6 +3,7 @@ package stateful
 import (
 	"context"
 
+	"fmt"
 	"github.com/nilebox/broker-server/pkg/api"
 	"github.com/nilebox/broker-server/pkg/controller"
 	"github.com/nilebox/broker-server/pkg/stateful/storage"
@@ -56,15 +57,17 @@ func (c *statefulController) CreateInstance(ctx context.Context, instanceID stri
 	log = log.With(zappers.InstanceID(instanceID))
 	log.Info("CreateInstance called")
 
-	// TODO check if instance already exists first
-	//instanceRecord, err := c.storage.GetInstance(instanceID)
-	//if err != nil {
-	//	// TODO check for NotFound
-	//	return nil, err
-	//}
-	//if instanceRecord != nil {
-	//	// TODO return 409
-	//}
+	// Check the instance doesn't exist or was deprovisioned
+	instance, err := c.storage.GetInstance(instanceID)
+	if err != nil {
+		if !storage.IsDeletedError(err) {
+			return nil, controller.NewInternalServerError(error.Error())
+		}
+	} else {
+		if instance.State != storage.InstanceStateDeleteSucceeded {
+			return nil, controller.NewConflict(fmt.Sprintf("The existing instance was found in state %s", string(instance.State)))
+		}
+	}
 
 	instanceParameters := &storage.InstanceSpec{
 		InstanceId: instanceID,
@@ -72,7 +75,7 @@ func (c *statefulController) CreateInstance(ctx context.Context, instanceID stri
 		PlanId:     req.PlanID,
 		Parameters: req.Parameters,
 	}
-	err := c.storage.CreateInstance(instanceParameters)
+	err = c.storage.CreateInstance(instanceParameters)
 	if err != nil {
 		return nil, err
 	}
@@ -86,12 +89,17 @@ func (c *statefulController) UpdateInstance(ctx context.Context, instanceID stri
 	log = log.With(zappers.InstanceID(instanceID))
 	log.Info("UpdateInstance called")
 
+	// Check the instance doesn't exist or was deprovisioned
 	instance, err := c.storage.GetInstance(instanceID)
 	if err != nil {
-		return nil, err
+		if !storage.IsDeletedError(err) {
+			return nil, controller.NewInternalServerError(error.Error())
+		}
+	} else {
+		if !storage.CanBeUpdated(instance.State) {
+			return nil, controller.NewUnprocessableEntity("The instance in state %q cannot be updated", string(instance.State))
+		}
 	}
-	// TODO check for instance status first (should not have operations in progress)
-	// instance.State = storage.InstanceStateUpdateInProgress
 	if req.PlanID != nil {
 		instance.Spec.PlanId = *req.PlanID
 	}

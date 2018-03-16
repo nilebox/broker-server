@@ -25,17 +25,27 @@ func NewGone(reason string, v ...interface{}) error {
 	}
 }
 
-func NewUnprocessableEntity() error {
+func NewAsyncRequired(reason string, v ...interface{}) error {
+	return NewUnprocessableEntity("This service plan requires client support for asynchronous service operations.")
+}
+
+func NewUnprocessableEntity(reason string, v ...interface{}) error {
 	return &controllerError{
-		Code:        http.StatusUnprocessableEntity,
-		Err:         "AsyncRequired",
-		Description: "This service plan requires client support for asynchronous service operations.",
+		Code: http.StatusUnprocessableEntity,
+		Err:  fmt.Sprintf(reason, v...),
 	}
 }
 
 func NewBadRequest(reason string, v ...interface{}) error {
 	return &controllerError{
 		Code: http.StatusBadRequest,
+		Err:  fmt.Sprintf(reason, v...),
+	}
+}
+
+func NewInternalServerError(reason string, v ...interface{}) error {
+	return &controllerError{
+		Code: http.StatusInternalServerError,
 		Err:  fmt.Sprintf(reason, v...),
 	}
 }

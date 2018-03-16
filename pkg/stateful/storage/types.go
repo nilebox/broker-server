@@ -87,6 +87,19 @@ func IsInProgress(state InstanceState) bool {
 	}
 }
 
+func CanBeUpdated(state InstanceState) bool {
+	switch state {
+	case InstanceStateCreateSucceeded:
+		return true
+	case InstanceStateUpdateSucceeded:
+		return true
+	case InstanceStateUpdateFailed:
+		return true
+	default:
+		return false
+	}
+}
+
 func GetOperationState(state InstanceState) api.OperationState {
 	switch state {
 	case InstanceStateCreateInProgress:

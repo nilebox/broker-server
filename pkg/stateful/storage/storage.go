@@ -3,12 +3,12 @@ package storage
 import "fmt"
 
 const (
-	errorDeleted    = "instance does not exist or has been deleted"
-	errorDeleting   = "instance is deleting"
-	errorInProgress = "instance cannot be modified because it is in progress"
-	errorConflict   = "instance already exists"
+	ErrorDeleted    = "instance does not exist or has been deleted"
+	ErrorDeleting   = "instance is deleting"
+	ErrorInProgress = "instance cannot be modified because it is in progress"
+	ErrorConflict   = "instance already exists"
 
-	errorUnknown = "unknown error"
+	ErrorUnknown = "unknown error"
 )
 
 type Storage interface {
@@ -27,28 +27,28 @@ type storageError struct {
 
 func NewDeleted(reason string, v ...interface{}) *storageError {
 	return &storageError{
-		Err:         errorDeleted,
+		Err:         ErrorDeleted,
 		Description: fmt.Sprintf(reason, v...),
 	}
 }
 
 func NewConflict(reason string, v ...interface{}) *storageError {
 	return &storageError{
-		Err:         errorConflict,
+		Err:         ErrorConflict,
 		Description: fmt.Sprintf(reason, v...),
 	}
 }
 
 func NewDeleting(reason string, v ...interface{}) *storageError {
 	return &storageError{
-		Err:         errorDeleting,
+		Err:         ErrorDeleting,
 		Description: fmt.Sprintf(reason, v...),
 	}
 }
 
 func NewInProgress(reason string, v ...interface{}) *storageError {
 	return &storageError{
-		Err:         errorInProgress,
+		Err:         ErrorInProgress,
 		Description: fmt.Sprintf(reason, v...),
 	}
 }
@@ -58,19 +58,19 @@ func (s *storageError) Error() string {
 }
 
 func IsDeletedError(e error) bool {
-	return ReasonForError(e) == errorDeleted
+	return ReasonForError(e) == ErrorDeleted
 }
 
 func IsDeletingError(e error) bool {
-	return ReasonForError(e) == errorDeleting
+	return ReasonForError(e) == ErrorDeleting
 }
 
 func IsInProgressError(e error) bool {
-	return ReasonForError(e) == errorInProgress
+	return ReasonForError(e) == ErrorInProgress
 }
 
 func IsConflictError(e error) bool {
-	return ReasonForError(e) == errorConflict
+	return ReasonForError(e) == ErrorConflict
 }
 
 func ReasonForError(e error) string {
@@ -78,5 +78,5 @@ func ReasonForError(e error) string {
 	case *storageError:
 		return t.Err
 	}
-	return errorUnknown
+	return ErrorUnknown
 }
